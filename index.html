@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Execução de Empenhos</title>
+  <meta name="description" content="Painel de execução orçamentária: valores empenhados, liquidados e a liquidar por nota de empenho.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23102A43'/%3E%3Crect x='6' y='18' width='5' height='8' fill='%232F73C4'/%3E%3Crect x='13.5' y='12' width='5' height='14' fill='%232F73C4'/%3E%3Crect x='21' y='7' width='5' height='19' fill='%23C26A0E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="root"><div class="wrap"><p class="sub">Carregando dados…</p></div></div>
+  <noscript><p style="padding:16px">Este painel precisa de JavaScript ativado.</p></noscript>
+  <script>
+  /* Login do administrador (Supabase). A chave "anon public" é pública por natureza;
+     quem protege os dados são as regras do banco. Nunca use a chave service_role aqui. */
+  window.EMPENHOS_CONFIG = {
+    supabaseUrl: 'https://wgmsfgidxqszthaahapx.supabase.co',
+    supabaseAnonKey: 'COLE_AQUI_A_ANON_PUBLIC_KEY'
+  };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
+  <script src="./script.js" defer></script>
+</body>
+</html>
