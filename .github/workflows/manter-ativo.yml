@@ -1,0 +1,39 @@
+# Mantém o banco do Supabase ativo.
+# O plano gratuito pausa o projeto após ~7 dias sem acesso; esta tarefa faz
+# uma leitura simples do painel duas vezes por semana (segunda e quinta).
+name: Manter banco ativo
+
+on:
+  schedule:
+    - cron: "17 13 * * 1,4"   # segunda e quinta, 08:17 em Rio Branco
+  workflow_dispatch:           # permite rodar manualmente pela aba Actions
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o site
+        uses: actions/checkout@v4
+
+      - name: Acessar o banco (leitura)
+        run: |
+          URL=$(grep -oE "supabaseUrl: *'[^']+'" index.html | sed -E "s/.*'([^']+)'/\1/")
+          KEY=$(grep -oE "supabaseAnonKey: *'[^']+'" index.html | sed -E "s/.*'([^']+)'/\1/")
+          for i in 1 2 3; do
+            CODE=$(curl -s -o resposta.txt -w "%{http_code}" "$URL/rest/v1/painel?select=atualizado" -H "apikey: $KEY")
+            echo "Tentativa $i: HTTP $CODE"; cat resposta.txt; echo
+            [ "$CODE" = "200" ] && exit 0
+            sleep 60
+          done
+          echo "O banco não respondeu. Ele pode ter sido pausado: entre no painel do Supabase e clique em Restore project."
+          exit 1
+
+      - name: Manter esta tarefa ligada
+        # O GitHub desliga tarefas agendadas após 60 dias sem alterações no repositório.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/manter-ativo.yml/enable"
