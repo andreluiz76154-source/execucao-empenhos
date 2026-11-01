@@ -22,6 +22,16 @@ L2=np.where(L<0.04, L*(L2.max() and 1)+ (L2-L)*(L/0.04), L2)
 lab[...,0]=np.clip(L2*255,0,255)
 # slight chroma boost compensates lifted shadows' desaturation
 lab[...,1:]=128+(lab[...,1:]-128)*1.10
+# local face lift: soft skin mask on denoised crop, +~9% luminance, feathered
+yc=cv2.cvtColor(dn,cv2.COLOR_BGR2YCrCb)
+sk=((yc[...,1]>135)&(yc[...,1]<180)&(yc[...,2]>85)&(yc[...,2]<135)&(yc[...,0]>35)).astype(np.float32)
+sk=cv2.morphologyEx(sk,cv2.MORPH_OPEN,np.ones((5,5),np.uint8))
+sk=cv2.GaussianBlur(sk,(0,0),14)
+Lc=lab[...,0]
+lab[...,0]=np.clip(Lc+sk*(255-Lc)*0.16,0,255)
+# local microcontrast (very gentle CLAHE blend)
+cl=cv2.createCLAHE(clipLimit=1.6,tileGridSize=(6,6)).apply(lab[...,0].astype(np.uint8)).astype(np.float32)
+lab[...,0]=lab[...,0]*0.7+cl*0.3
 img=cv2.cvtColor(lab.astype(np.uint8),cv2.COLOR_LAB2BGR).astype(np.float32)
 # 4) white balance: partial gray-world on mid-tones (30% strength, keeps night warmth)
 m=img.reshape(-1,3); sel=(m.mean(1)>40)&(m.mean(1)<200)
@@ -55,6 +65,9 @@ Y=np.clip(Y+0.55*d,0,255)
 loc_max=cv2.dilate(ycc[...,0],np.ones((5,5)));loc_min=cv2.erode(ycc[...,0],np.ones((5,5)))
 ycc[...,0]=np.clip(Y,loc_min-6,loc_max+6)
 final=cv2.cvtColor(np.clip(ycc,0,255).astype(np.uint8),cv2.COLOR_YCrCb2BGR)
+rng=np.random.default_rng(1)
+gr=cv2.GaussianBlur(rng.normal(0,1,final.shape[:2]).astype(np.float32),(0,0),0.7)*2.2
+final=np.clip(final.astype(np.float32)+gr[...,None],0,255).astype(np.uint8)
 fin=Image.fromarray(cv2.cvtColor(final,cv2.COLOR_BGR2RGB))
 fin.save(out+'foto_final_4x5.jpg',quality=95,subsampling=0,optimize=True)
 # before/after (original crop, upscaled same way, vs final)
