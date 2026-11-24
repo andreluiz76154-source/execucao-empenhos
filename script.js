@@ -257,7 +257,12 @@ function drawTable(){
 function sortBy(k){if(sk===k)sd*=-1;else{sk=k;sd=['esp','nd','ne','data','ano'].includes(k)?1:-1}drawTable()}
 
 ['#q','#fy','#fs'].forEach(s=>$(s).addEventListener('input',drawTable));
-$('#foot').textContent='Fonte: planilha de empenhos mantida pelo administrador desta página.';
+$('#foot').innerHTML='<div class="foot-src">Fonte: planilha de empenhos mantida pelo administrador desta página.</div>'
+ +'<div class="credito">'
+ +'<span><span class="cl">Criado em</span> <time datetime="2026-10-08">08/10/2026</time></span>'
+ +'<span><span class="cl">Criador</span> Cb André Luiz da Silva <b>Santana</b></span>'
+ +'<span><span class="cl">Assistência 24h</span> <a class="num" href="tel:+5568992194329">(68) 99219-4329</a></span>'
+ +'</div>';
 $('#b-adm').textContent=ONLINE?'Login do administrador':'Modo de edição';
 
 /* tooltip */
