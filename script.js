@@ -261,7 +261,7 @@ $('#foot').innerHTML='<div class="foot-src">Fonte: planilha de empenhos mantida 
  +'<div class="credito">'
  +'<span><span class="cl">Criado em</span> <time datetime="2026-10-08">08/10/2026</time></span>'
  +'<span><span class="cl">Criador</span> Cb André Luiz da Silva <b>Santana</b></span>'
- +'<span><span class="cl">Assistência 24h · WhatsApp</span> <a class="num wpp" href="https://wa.me/5568992194329?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20o%20painel%20Execu%C3%A7%C3%A3o%20de%20Empenhos." target="_blank" rel="noopener" aria-label="Abrir conversa no WhatsApp com (68) 99219-4329">(68) 99219-4329</a></span>'
+ +'<span><span class="cl">Tiragem de dúvidas · WhatsApp</span> <a class="num wpp" href="https://wa.me/5568992194329?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20o%20painel%20Execu%C3%A7%C3%A3o%20de%20Empenhos." target="_blank" rel="noopener" aria-label="Abrir conversa no WhatsApp com (68) 99219-4329">(68) 99219-4329</a></span>'
  +'</div>';
 $('#b-adm').textContent=ONLINE?'Login do administrador':'Modo de edição';
 
